@@ -7,7 +7,8 @@ namespace VehicleExplorer.Api.Controllers;
 
 [ApiController]
 [Route("api/makes")]
-[Produces("application/json")]
+// Note: no [Produces("application/json")] here - it would overwrite the
+// application/problem+json content type of validation errors.
 public sealed class MakesController(IVehicleService vehicles, TimeProvider clock) : ControllerBase
 {
     /// <summary>vPIC model-year data is only meaningful from the 17-character VIN era onwards.</summary>
