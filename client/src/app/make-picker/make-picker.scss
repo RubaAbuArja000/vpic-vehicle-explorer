@@ -1,0 +1,68 @@
+:host {
+  display: block;
+}
+
+.combo {
+  position: relative;
+}
+
+input {
+  padding-right: 2.25rem;
+}
+
+.clear {
+  position: absolute;
+  right: 0.4rem;
+  top: 50%;
+  transform: translateY(-50%);
+  border: 0;
+  background: transparent;
+  color: var(--muted);
+  font-size: 1.25rem;
+  line-height: 1;
+  cursor: pointer;
+  padding: 0.25rem 0.4rem;
+  border-radius: 6px;
+
+  &:hover {
+    color: var(--text);
+    background: var(--surface-2);
+  }
+}
+
+.listbox {
+  position: absolute;
+  z-index: 10;
+  inset-inline: 0;
+  top: calc(100% + 4px);
+  max-height: 18rem;
+  overflow-y: auto;
+  margin: 0;
+  padding: 0.25rem;
+  list-style: none;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  box-shadow: var(--shadow);
+
+  li[role='option'] {
+    padding: 0.5rem 0.65rem;
+    border-radius: 6px;
+    cursor: pointer;
+
+    &:hover,
+    &.active {
+      background: var(--accent-soft);
+      color: var(--accent-strong);
+    }
+  }
+
+  .hint {
+    padding: 0.5rem 0.65rem;
+    color: var(--muted);
+
+    &.error {
+      color: var(--danger);
+    }
+  }
+}

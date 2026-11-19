@@ -1,0 +1,50 @@
+<label class="field-label" for="make-input">Make</label>
+<div class="combo">
+  <input
+    #input
+    id="make-input"
+    type="text"
+    role="combobox"
+    autocomplete="off"
+    placeholder="Start typing, e.g. Honda"
+    aria-autocomplete="list"
+    aria-controls="make-listbox"
+    [attr.aria-expanded]="open() && results().status !== 'idle'"
+    [attr.aria-activedescendant]="activeIndex() >= 0 ? 'make-opt-' + activeIndex() : null"
+    (input)="onInput(input.value)"
+    (focus)="open.set(true)"
+    (keydown)="onKeydown($event)"
+  />
+  @if (query()) {
+    <button type="button" class="clear" aria-label="Clear make" (click)="clear()">×</button>
+  }
+
+  @if (open() && results().status !== 'idle') {
+    <ul id="make-listbox" role="listbox" class="listbox">
+      @switch (results().status) {
+        @case ('loading') {
+          <li class="hint">Searching…</li>
+        }
+        @case ('error') {
+          <li class="hint error">Couldn't load makes. Try again.</li>
+        }
+        @default {
+          @for (option of options(); track option.id; let i = $index) {
+            <li
+              role="option"
+              [id]="'make-opt-' + i"
+              [class.active]="i === activeIndex()"
+              [attr.aria-selected]="make()?.id === option.id"
+              (mousedown)="$event.preventDefault()"
+              (click)="select(option)"
+            >
+              {{ option.name }}
+            </li>
+          } @empty {
+            <li class="hint">No makes match “{{ query() }}”.</li>
+          }
+        }
+      }
+    </ul>
+  }
+</div>

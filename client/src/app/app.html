@@ -1,0 +1,106 @@
+<header class="hero">
+  <div class="container">
+    <h1>Vehicle Explorer</h1>
+    <p>Pick a make and model year to see its vehicle types and models, straight from NHTSA's vPIC database.</p>
+  </div>
+</header>
+
+<main class="container">
+  <section class="card filters" aria-label="Search filters">
+    <app-make-picker [make]="make()" (makeChange)="onMakeChange($event)" />
+
+    <div>
+      <label class="field-label" for="year-select">Model year</label>
+      <select id="year-select" [value]="year() ?? ''" (change)="onYearChange($any($event.target).value)">
+        <option value="">Select a year</option>
+        @for (y of years; track y) {
+          <option [value]="y">{{ y }}</option>
+        }
+      </select>
+    </div>
+  </section>
+
+  <!-- Vehicle types: depend on the make only -->
+  @let t = types();
+  @if (make(); as m) {
+    <section class="types" aria-labelledby="types-heading">
+      <h2 id="types-heading">Vehicle types for {{ m.name }}</h2>
+      @if (t.status === 'loading') {
+        <div class="chips"><span class="chip skeleton"></span><span class="chip skeleton"></span></div>
+      } @else if (t.status === 'error') {
+        <p class="muted">Vehicle types are unavailable right now.</p>
+      } @else if (t.status === 'ok' && t.data.length === 0) {
+        <p class="muted">vPIC lists no vehicle types for this make.</p>
+      } @else if (t.status === 'ok') {
+        <div class="chips" role="group" aria-label="Filter models by vehicle type">
+          <button type="button" class="chip" [class.selected]="vehicleType() === null"
+                  [attr.aria-pressed]="vehicleType() === null" (click)="vehicleType.set(null)">
+            All types
+          </button>
+          @for (type of t.data; track type.id) {
+            <button type="button" class="chip" [class.selected]="vehicleType() === type.name"
+                    [attr.aria-pressed]="vehicleType() === type.name" (click)="vehicleType.set(type.name)">
+              {{ type.name }}
+            </button>
+          }
+        </div>
+      }
+    </section>
+  }
+
+  <!-- Models: depend on make + year (+ optional type) -->
+  @let s = models();
+  <section class="results" aria-live="polite">
+    @if (s.status === 'idle') {
+      <div class="empty">
+        <p class="empty-title">Choose a make and a year</p>
+        <p class="muted">Results will appear here.</p>
+      </div>
+    } @else if (s.status === 'loading') {
+      <div class="grid" aria-busy="true">
+        @for (i of [1, 2, 3, 4, 5, 6]; track i) {
+          <div class="model-card skeleton"></div>
+        }
+      </div>
+    } @else if (s.status === 'error') {
+      <div class="empty error" role="alert">
+        <p class="empty-title">Couldn't load models</p>
+        <p class="muted">{{ s.message }}</p>
+        <button type="button" class="btn" (click)="retry()">Try again</button>
+      </div>
+    } @else if (s.data.length === 0) {
+      <div class="empty">
+        <p class="empty-title">No models found</p>
+        <p class="muted">
+          vPIC has no {{ vehicleType() ?? '' }} models for {{ make()?.name }} in {{ year() }}.
+          Try another year{{ vehicleType() ? ' or vehicle type' : '' }}.
+        </p>
+      </div>
+    } @else {
+      <div class="results-header">
+        <h2>
+          {{ visibleModels().length }} {{ visibleModels().length === 1 ? 'model' : 'models' }}
+          <span class="muted">· {{ make()?.name }} {{ year() }}{{ vehicleType() ? ' · ' + vehicleType() : '' }}</span>
+        </h2>
+        <input type="search" class="filter" placeholder="Filter models…" aria-label="Filter models by name"
+               [value]="modelFilter()" (input)="modelFilter.set($any($event.target).value)" />
+      </div>
+      <ul class="grid">
+        @for (m of visibleModels(); track m.id) {
+          <li class="model-card">
+            <span class="model-name">{{ m.name }}</span>
+            @if (m.vehicleType) {
+              <span class="badge">{{ m.vehicleType }}</span>
+            }
+          </li>
+        } @empty {
+          <li class="muted">No models match “{{ modelFilter() }}”.</li>
+        }
+      </ul>
+    }
+  </section>
+</main>
+
+<footer class="container footer muted">
+  Data: <a href="https://vpic.nhtsa.dot.gov/api/" target="_blank" rel="noopener">NHTSA vPIC API</a>
+</footer>

@@ -482,3 +482,7 @@ $RECYCLE.BIN/
 
 # Vim temporary swap files
 *.swp
+
+# Angular build output copied into the API for local single-port runs
+src/VehicleExplorer.Api/wwwroot/
+.claude/
