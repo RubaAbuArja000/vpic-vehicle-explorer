@@ -3,10 +3,10 @@
 # Installs Docker and runs the public image that CI pushes to GitHub Container Registry.
 # Contains no credentials: the image is public, so no registry login is needed.
 #
-# Before using: replace <github-user>/<repo> below with your repository (lowercase).
+# Image name must be lowercase (GHCR requirement).
 set -euxo pipefail
 
-IMAGE="ghcr.io/<github-user>/<repo>:latest"
+IMAGE="ghcr.io/rubaabuarja000/vpic-vehicle-explorer:latest"
 
 dnf update -y
 dnf install -y docker

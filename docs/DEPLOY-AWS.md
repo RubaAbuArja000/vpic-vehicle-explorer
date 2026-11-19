@@ -12,7 +12,7 @@ public image, so it needs no secrets.
 ## 1. Publish the image
 
 1. Push the repository to GitHub (`main`). The **CI** workflow builds and pushes
-   `ghcr.io/<github-user>/<repo>:latest`.
+   `ghcr.io/rubaabuarja000/vpic-vehicle-explorer:latest`.
 2. On GitHub: your profile → **Packages** → the package → **Package settings** → **Change visibility → Public**.
    (New GHCR packages are private by default; EC2 can't pull them anonymously otherwise.)
 
@@ -28,7 +28,7 @@ In the AWS console (region of your choice) → **EC2 → Launch instance**:
 | Key pair | Optional — you can use **EC2 Instance Connect** instead |
 | Network → Security group | Allow **HTTP (80)** from `0.0.0.0/0`. Allow SSH (22) only from *My IP* if you want SSH. |
 | Storage | 8 GB gp3 (default) |
-| Advanced details → **User data** | Paste [`deploy/ec2-user-data.sh`](../deploy/ec2-user-data.sh) after replacing `<github-user>/<repo>` |
+| Advanced details → **User data** | Paste the contents of [`deploy/ec2-user-data.sh`](../deploy/ec2-user-data.sh) |
 
 Launch, wait ~3 minutes for the user-data script to finish, then open `http://<public-IPv4-DNS>/`.
 

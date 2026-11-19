@@ -33,8 +33,8 @@ In Development the OpenAPI document is at `/openapi/v1.json`.
 1. Install [Docker Desktop](https://www.docker.com/products/docker-desktop/) and make sure it is running.
 2. Clone and start:
    ```bash
-   git clone https://github.com/<github-user>/<repo>.git
-   cd <repo>
+   git clone https://github.com/RubaAbuArja000/vpic-vehicle-explorer.git
+   cd vpic-vehicle-explorer
    docker compose up --build
    ```
 3. Open <http://localhost:8080>.
