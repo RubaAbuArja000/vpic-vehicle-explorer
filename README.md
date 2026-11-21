@@ -6,7 +6,7 @@ Pick a car make and a model year, then browse the vehicle types and models that 
 - **Backend:** ASP.NET Core 9 Web API (controllers), typed `HttpClient` + standard resilience handler, in-memory caching
 - **Frontend:** Angular 20 (standalone components, signals, zoneless)
 - **Packaging:** one Docker image — the Angular build is served as static files by the API
-- **Live demo:** `<add your AWS URL here>`
+- **Live demo:** http://ec2-13-51-175-51.eu-north-1.compute.amazonaws.com (AWS EC2 t3.micro, eu-north-1)
 
 ```
 Browser ──► .NET API (/api/*) ──► NHTSA vPIC
